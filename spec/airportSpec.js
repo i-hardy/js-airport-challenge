@@ -8,9 +8,13 @@ describe("Airport", function() {
     concorde = new Plane("concorde");
   });
 
+  it("should have a default capacity", function() {
+    expect(gatwick.capacity).toEqual(DEFAULTCAPACITY)
+  });
+
   it("should have an empty array of planes", function() {
     expect(gatwick.planes).toEqual([])
-  })
+  });
 
   it("should be able to land planes", function() {
     spyOn(boeing, "airborne");
@@ -24,5 +28,17 @@ describe("Airport", function() {
     gatwick.land(concorde)
     gatwick.takeOff(boeing)
     expect(gatwick.planes).not.toContain(boeing);
-  })
+  });
+
+  it("should be able to change capacity", function() {
+    gatwick.setCapacity(50)
+    expect(gatwick.capacity).toEqual(50)
+  });
+
+  it("can't land planes in a full airport", function() {
+    for(i = 0; i < 20; i++) {
+      gatwick.land(new Plane)
+    }
+    expect(function() { gatwick.land(boeing) }).toThrow("Airport is full")
+  });
 })
