@@ -4,7 +4,8 @@ describe("Airport", function() {
 
   beforeEach(function() {
     gatwick = new Airport();
-    boeing = new Plane();
+    boeing = new Plane("boeing");
+    concorde = new Plane("concorde");
   });
 
   it("should have an empty array of planes", function() {
@@ -12,9 +13,16 @@ describe("Airport", function() {
   })
 
   it("should be able to land planes", function() {
-    spyOn(boeing, "land");
+    spyOn(boeing, "airborne");
     gatwick.land(boeing)
     expect(gatwick.planes).toContain(boeing);
-    expect(boeing.land).toHaveBeenCalledWith(false);
+    expect(boeing.airborne).toHaveBeenCalledWith(false);
   });
+
+  it("should allow planes to take off", function() {
+    gatwick.land(boeing)
+    gatwick.land(concorde)
+    gatwick.takeOff(boeing)
+    expect(gatwick.planes).not.toContain(boeing);
+  })
 })

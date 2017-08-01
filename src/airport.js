@@ -3,6 +3,11 @@ function Airport() {
 };
 
 Airport.prototype.land = function(plane) {
-  plane.land(false)
+  plane.airborne(false)
   this.planes.push(plane)
+};
+
+Airport.prototype.takeOff = function(plane) {
+  plane.airborne(true)
+  this.planes.splice(plane)
 };

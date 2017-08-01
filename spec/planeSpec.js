@@ -10,7 +10,7 @@ describe("Plane", function() {
   });
 
   it("no longer flies after landing at an airport", function() {
-    boeing.land(false)
+    boeing.airborne(false)
     expect(boeing.isFlying).toBe(false);
   });
 })
