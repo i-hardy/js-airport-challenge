@@ -3,6 +3,10 @@ function Plane(name) {
   this.isFlying = true;
 }
 
-Plane.prototype.airborne = function(flying) {
-  this.isFlying = flying;
-};
+Plane.prototype.land = function() {
+  this.isFlying = false;
+}
+
+Plane.prototype.takeOff = function() {
+  this.isFlying = true;
+}

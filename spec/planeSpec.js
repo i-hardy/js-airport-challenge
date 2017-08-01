@@ -5,12 +5,13 @@ describe("Plane", function() {
     boeing = new Plane();
   });
 
-  it("knows if it is flying or not", function() {
-    expect(boeing.isFlying).toBe(true);
-  });
-
   it("no longer flies after landing at an airport", function() {
-    boeing.airborne(false)
+    boeing.land();
     expect(boeing.isFlying).toBe(false);
   });
+
+  it("is flying after takeoff", function() {
+    boeing.takeOff();
+    expect(boeing.isFlying).toBe(true);
+  })
 })

@@ -12,33 +12,50 @@ describe("Airport", function() {
     expect(gatwick.capacity).toEqual(DEFAULTCAPACITY)
   });
 
-  it("should have an empty array of planes", function() {
-    expect(gatwick.planes).toEqual([])
+  describe("land", function() {
+    it("should be able to land planes", function() {
+      spyOn(boeing, "land");
+      spyOn(Math, "floor").and.returnValue(5);
+      gatwick.land(boeing)
+      expect(gatwick.planes).toContain(boeing);
+      expect(boeing.land).toHaveBeenCalled();
+    });
+
+    it("can't land planes in a full airport", function() {
+      spyOn(Math, "floor").and.returnValue(5);
+      for(i = 0; i < 20; i++) {
+        gatwick.land(new Plane)
+      }
+      expect(function() { gatwick.land(boeing) }).toThrow("Airport is full")
+    });
+
+    it("can't land planes when it's stormy", function() {
+      spyOn(Math, "floor").and.returnValue(10);
+      expect(function() { gatwick.land(boeing) }).toThrow("Poor weather prevents landing")
+    });
   });
 
-  it("should be able to land planes", function() {
-    spyOn(boeing, "airborne");
-    gatwick.land(boeing)
-    expect(gatwick.planes).toContain(boeing);
-    expect(boeing.airborne).toHaveBeenCalledWith(false);
+  describe("takeOff", function() {
+    it("should allow planes to take off", function() {
+      spyOn(boeing, "takeOff");
+      spyOn(Math, "floor").and.returnValue(5);
+      gatwick.land(boeing)
+      gatwick.land(concorde)
+      gatwick.takeOff(boeing)
+      expect(gatwick.planes).not.toContain(boeing);
+      expect(boeing.takeOff).toHaveBeenCalled();
+    });
+
+    it("should prevent takeoff when it's stormy", function() {
+      spyOn(Math, "floor").and.returnValue(10);
+      expect(function() { gatwick.takeOff(boeing) }).toThrow("Poor weather prevents takeoff")
+    });
   });
 
-  it("should allow planes to take off", function() {
-    gatwick.land(boeing)
-    gatwick.land(concorde)
-    gatwick.takeOff(boeing)
-    expect(gatwick.planes).not.toContain(boeing);
+  describe("setCapacity", function() {
+    it("should be able to change capacity", function() {
+      gatwick.setCapacity(50)
+      expect(gatwick.capacity).toEqual(50)
+    });
   });
-
-  it("should be able to change capacity", function() {
-    gatwick.setCapacity(50)
-    expect(gatwick.capacity).toEqual(50)
-  });
-
-  it("can't land planes in a full airport", function() {
-    for(i = 0; i < 20; i++) {
-      gatwick.land(new Plane)
-    }
-    expect(function() { gatwick.land(boeing) }).toThrow("Airport is full")
-  });
-})
+});
